@@ -11,9 +11,12 @@
     {
         static void Main(string[] args)
         {
+            // TODO: This path needs to be provided in some configurable way...
+            const string temporaryPath = "/Users/kdobrzynski/Downloads/UnpackedMugen-main";
+
             var client = new NegumSdlClient();
 
-            client.Initialize();
+            client.Initialize(temporaryPath);
             client.CreateWindow();
             client.Start();
             client.Clear();

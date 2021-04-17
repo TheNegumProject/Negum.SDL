@@ -1,4 +1,7 @@
 using System;
+using Negum.Core.Containers;
+using Negum.Game.Client;
+using Negum.Game.Common.Containers;
 using static SDL2.SDL;
 
 namespace Negum.SDL
@@ -13,6 +16,11 @@ namespace Negum.SDL
     public class NegumSdlClient
     {
         /// <summary>
+        /// Negum Client.
+        /// </summary>
+        private INegumClient Client { get; set; }
+
+        /// <summary>
         /// Pointer to the main window.
         /// </summary>
         protected IntPtr WindowPtr { get; set; }
@@ -21,12 +29,18 @@ namespace Negum.SDL
         /// Initializes SDL library.
         /// </summary>
         /// <exception cref="SystemException"></exception>
-        public virtual void Initialize()
+        /// <param name="negumDirPath">Path to Negum directory.</param>
+        public virtual void Initialize(string negumDirPath)
         {
             if (SDL_Init(SDL_INIT_EVERYTHING) < 0)
             {
                 throw new SystemException($"Error when initializing SDL: \"{SDL_GetError()}\"");
             }
+
+            NegumContainer.RegisterKnownTypes();
+            NegumGameContainer.RegisterKnownTypes();
+
+            this.Client = NegumClientFactory.CreateAsync(negumDirPath).Result;
         }
 
         /// <summary>
@@ -58,6 +72,8 @@ namespace Negum.SDL
         /// </summary>
         public virtual void Start()
         {
+            // TODO: this.Client.StartAsync().Wait();
+
             SDL_Event e;
             var quit = false;
 
@@ -89,6 +105,8 @@ namespace Negum.SDL
         /// </summary>
         public virtual void Clear()
         {
+            // TODO: this.Client.StopAsync().Wait();
+
             SDL_DestroyWindow(this.WindowPtr);
             SDL_Quit();
         }
