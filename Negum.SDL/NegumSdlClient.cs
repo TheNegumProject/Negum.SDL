@@ -87,13 +87,7 @@ namespace Negum.SDL
                             quit = true;
                             break;
                         case SDL_EventType.SDL_KEYDOWN:
-                            switch (e.key.keysym.sym)
-                            {
-                                case SDL_Keycode.SDLK_q:
-                                    quit = true;
-                                    break;
-                            }
-
+                            // TODO: this.Client.Hooks.OnKeyPressed(new [] { (int)e.key.keysym.sym });
                             break;
                     }
                 }
