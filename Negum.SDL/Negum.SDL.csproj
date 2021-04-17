@@ -3,6 +3,16 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
+        <PackageVersion>0.1.0</PackageVersion>
+        <Title>Negum.SDL</Title>
+        <Authors>The Negum Project</Authors>
+        <Copyright>MIT License</Copyright>
+        <PackageProjectUrl>https://github.com/TheNegumProject/Negum.SDL</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/TheNegumProject/Negum.SDL</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/TheNegumProject/Negum.SDL</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <Company>The Negum Project</Company>
+        <NeutralLanguage>en</NeutralLanguage>
     </PropertyGroup>
 
     <ItemGroup>
