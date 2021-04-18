@@ -1,6 +1,7 @@
 using System;
 using Negum.Core.Containers;
 using Negum.Game.Client;
+using Negum.Game.Client.Screen;
 using Negum.Game.Common.Containers;
 using static SDL2.SDL;
 
@@ -18,12 +19,17 @@ namespace Negum.SDL
         /// <summary>
         /// Negum Client.
         /// </summary>
-        private INegumClient Client { get; set; }
+        protected INegumClient Client { get; set; }
 
         /// <summary>
         /// Pointer to the main window.
         /// </summary>
         protected IntPtr WindowPtr { get; set; }
+
+        /// <summary>
+        /// Pointer to the main renderer.
+        /// </summary>
+        protected IntPtr RendererPtr { get; set; }
 
         /// <summary>
         /// Initializes SDL library.
@@ -65,6 +71,13 @@ namespace Negum.SDL
             {
                 throw new SystemException($"Error when creating a window: \"{SDL_GetError()}\"");
             }
+
+            this.RendererPtr = SDL_CreateRenderer(this.WindowPtr, -1, SDL_RendererFlags.SDL_RENDERER_ACCELERATED);
+
+            if (this.RendererPtr == IntPtr.Zero)
+            {
+                throw new SystemException($"Error when creating a renderer: \"{SDL_GetError()}\"");
+            }
         }
 
         /// <summary>
@@ -79,6 +92,7 @@ namespace Negum.SDL
 
             while (!quit)
             {
+                // Handle events on queue
                 while (SDL_PollEvent(out e) != 0)
                 {
                     switch (e.type)
@@ -91,6 +105,15 @@ namespace Negum.SDL
                             break;
                     }
                 }
+
+                // Clear screen
+                SDL_RenderClear(this.RendererPtr);
+
+                // Render textures / sprites to screen
+                // TODO: this.Client.Hooks.Render(this.Render);
+
+                // Update screen
+                SDL_RenderPresent(this.RendererPtr);
             }
         }
 
@@ -110,5 +133,27 @@ namespace Negum.SDL
         /// <returns>Window title.</returns>
         protected virtual string GetTitle() =>
             NegumSdlTitleBuilder.Build();
+
+        /// <summary>
+        /// Contains logic which renders data to screen.
+        /// </summary>
+        protected virtual void Render(RenderContext ctx)
+        {
+            // TODO: How to render multiple textures / sprites to the screen ???
+
+            // unsafe
+            // {
+            //     var files = this.Client.Engine.Characters.ElementAt(1).Sprite.SpriteSubFiles;
+            //     var pixels = files.ElementAt(150).Image.ToArray();
+            //
+            //     fixed (void* p = &pixels[0])
+            //     {
+            //         var surfacePtr = SDL_CreateRGBSurfaceFrom(new IntPtr(p), 128, 128, 24, 128 * 24, 0x0000FF, 0x00FF00, 0xFF0000, 0);
+            //         var texturePtr = SDL_CreateTextureFromSurface(this.RendererPtr, surfacePtr);
+            //         SDL_RenderCopy(this.RendererPtr, texturePtr, IntPtr.Zero, IntPtr.Zero);
+            //         SDL_RenderPresent(this.RendererPtr);
+            //     }
+            // }
+        }
     }
 }

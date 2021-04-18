@@ -1,4 +1,6 @@
-﻿namespace Negum.SDL
+﻿using System;
+
+namespace Negum.SDL
 {
     /// <summary>
     /// Standard runner for Negum SDL Client.
@@ -16,7 +18,12 @@
 
             var client = new NegumSdlClient();
 
+            Console.WriteLine($"Loading directory: {temporaryPath}");
+
             client.Initialize(temporaryPath);
+
+            Console.WriteLine("Directory loaded.");
+
             client.CreateWindow();
             client.Start();
             client.Clear();
