@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Negum.Core.Containers;
 using Negum.Game.Client;
 using Negum.Game.Client.Screen;
@@ -140,6 +141,14 @@ namespace Negum.SDL
         protected virtual void Render(RenderContext ctx)
         {
             // TODO: How to render multiple textures / sprites to the screen ???
+
+            foreach (var layerEntry in ctx.OrderBy(x => x.Key))
+            {
+                foreach (var spriteCtx in layerEntry.Value)
+                {
+                    // TODO: Render sprite
+                }
+            }
 
             // unsafe
             // {
