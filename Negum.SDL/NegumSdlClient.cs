@@ -86,7 +86,7 @@ namespace Negum.SDL
         /// </summary>
         public virtual void Start()
         {
-            // TODO: this.Client.StartAsync().Wait();
+            this.Client.StartAsync();
 
             SDL_Event e;
             var quit = false;
@@ -102,7 +102,7 @@ namespace Negum.SDL
                             quit = true;
                             break;
                         case SDL_EventType.SDL_KEYDOWN:
-                            // TODO: this.Client.Hooks.OnKeyPressed(new [] { (int)e.key.keysym.sym });
+                            this.Client.Hooks.OnKeyPressed(new[] {(int) e.key.keysym.sym});
                             break;
                     }
                 }
@@ -112,7 +112,7 @@ namespace Negum.SDL
                 SDL_RenderClear(this.RendererPtr);
 
                 // Render textures / sprites to screen
-                // TODO: this.Client.Hooks.Render(this.Render);
+                this.Client.Hooks.Render(this.Render);
 
                 // Update screen
                 SDL_RenderPresent(this.RendererPtr);
@@ -124,7 +124,7 @@ namespace Negum.SDL
         /// </summary>
         public virtual void Clear()
         {
-            // TODO: this.Client.StopAsync().Wait();
+            this.Client.StopAsync().Wait();
 
             SDL_DestroyWindow(this.WindowPtr);
             SDL_Quit();
@@ -148,12 +148,12 @@ namespace Negum.SDL
                     unsafe
                     {
                         var pixels = spriteCtx.Image.ToArray();
-                    
+
                         fixed (void* p = &pixels[0])
                         {
                             var texturePtr = SDL_CreateTexture(this.RendererPtr, SDL_PIXELFORMAT_ABGR8888,
                                 (int) SDL_TextureAccess.SDL_TEXTUREACCESS_STATIC, spriteCtx.Width, spriteCtx.Height);
-                    
+
                             var rect = new SDL_Rect
                             {
                                 w = spriteCtx.Width * ctx.Scale,
@@ -161,7 +161,7 @@ namespace Negum.SDL
                                 x = spriteCtx.PosX,
                                 y = spriteCtx.PosY
                             };
-                    
+
                             SDL_SetRenderTarget(this.RendererPtr, texturePtr);
                             SDL_UpdateTexture(texturePtr, IntPtr.Zero, new IntPtr(p), spriteCtx.Width * 4);
                             SDL_RenderCopy(this.RendererPtr, texturePtr, IntPtr.Zero, ref rect);
