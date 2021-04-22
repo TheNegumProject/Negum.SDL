@@ -113,7 +113,6 @@ namespace Negum.SDL
 
                 // Render textures / sprites to screen
                 // TODO: this.Client.Hooks.Render(this.Render);
-                this.Render(null); // TODO: Remove this after testing
 
                 // Update screen
                 SDL_RenderPresent(this.RendererPtr);
@@ -142,31 +141,32 @@ namespace Negum.SDL
         /// </summary>
         protected virtual void Render(RenderContext ctx)
         {
-            // TODO: How to render multiple textures / sprites to the screen ???
-
-            // foreach (var layerEntry in ctx.OrderBy(x => x.Key))
-            // {
-            //     foreach (var spriteCtx in layerEntry.Value)
-            //     {
-            //         // TODO: Render sprite
-            //     }
-            // }
-
-            unsafe
+            foreach (var layerEntry in ctx.OrderBy(x => x.Key))
             {
-                var sprite = this.Client.Engine.Characters.ElementAt(0).Sprite;
-                var files = sprite.SpriteSubFiles;
-                var image = files.ElementAt(2);
-                var pixels = image.Image.ToArray();
-
-                fixed (void* p = &pixels[0])
+                foreach (var spriteCtx in layerEntry.Value)
                 {
-                    var texturePtr = SDL_CreateTexture(this.RendererPtr, SDL_PIXELFORMAT_ABGR8888,
-                        (int) SDL_TextureAccess.SDL_TEXTUREACCESS_STATIC, image.Width, image.Height);
-
-                    SDL_SetRenderTarget(this.RendererPtr, texturePtr);
-                    SDL_UpdateTexture(texturePtr, IntPtr.Zero, new IntPtr(p), image.Width * 4);
-                    SDL_RenderCopy(this.RendererPtr, texturePtr, IntPtr.Zero, IntPtr.Zero);
+                    unsafe
+                    {
+                        var pixels = spriteCtx.Image.ToArray();
+                    
+                        fixed (void* p = &pixels[0])
+                        {
+                            var texturePtr = SDL_CreateTexture(this.RendererPtr, SDL_PIXELFORMAT_ABGR8888,
+                                (int) SDL_TextureAccess.SDL_TEXTUREACCESS_STATIC, spriteCtx.Width, spriteCtx.Height);
+                    
+                            var rect = new SDL_Rect
+                            {
+                                w = spriteCtx.Width * ctx.Scale,
+                                h = spriteCtx.Height * ctx.Scale,
+                                x = spriteCtx.PosX,
+                                y = spriteCtx.PosY
+                            };
+                    
+                            SDL_SetRenderTarget(this.RendererPtr, texturePtr);
+                            SDL_UpdateTexture(texturePtr, IntPtr.Zero, new IntPtr(p), spriteCtx.Width * 4);
+                            SDL_RenderCopy(this.RendererPtr, texturePtr, IntPtr.Zero, ref rect);
+                        }
+                    }
                 }
             }
         }
