@@ -17,8 +17,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Negum.Core" Version="0.2021.417.1144" />
-      <PackageReference Include="Negum.Game" Version="0.2021.419.623" />
+      <PackageReference Include="Negum.Core" Version="0.2021.422.1042" />
+      <PackageReference Include="Negum.Game" Version="0.2021.422.1145" />
       <PackageReference Include="ppy.SDL2-CS" Version="1.0.225-alpha" />
     </ItemGroup>
 
