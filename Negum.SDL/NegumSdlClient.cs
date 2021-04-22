@@ -108,10 +108,12 @@ namespace Negum.SDL
                 }
 
                 // Clear screen
+                SDL_SetRenderDrawColor(this.RendererPtr, 255, 255, 255, 255);
                 SDL_RenderClear(this.RendererPtr);
 
                 // Render textures / sprites to screen
                 // TODO: this.Client.Hooks.Render(this.Render);
+                this.Render(null); // TODO: Remove this after testing
 
                 // Update screen
                 SDL_RenderPresent(this.RendererPtr);
@@ -142,27 +144,31 @@ namespace Negum.SDL
         {
             // TODO: How to render multiple textures / sprites to the screen ???
 
-            foreach (var layerEntry in ctx.OrderBy(x => x.Key))
-            {
-                foreach (var spriteCtx in layerEntry.Value)
-                {
-                    // TODO: Render sprite
-                }
-            }
-
-            // unsafe
+            // foreach (var layerEntry in ctx.OrderBy(x => x.Key))
             // {
-            //     var files = this.Client.Engine.Characters.ElementAt(1).Sprite.SpriteSubFiles;
-            //     var pixels = files.ElementAt(150).Image.ToArray();
-            //
-            //     fixed (void* p = &pixels[0])
+            //     foreach (var spriteCtx in layerEntry.Value)
             //     {
-            //         var surfacePtr = SDL_CreateRGBSurfaceFrom(new IntPtr(p), 128, 128, 24, 128 * 24, 0x0000FF, 0x00FF00, 0xFF0000, 0);
-            //         var texturePtr = SDL_CreateTextureFromSurface(this.RendererPtr, surfacePtr);
-            //         SDL_RenderCopy(this.RendererPtr, texturePtr, IntPtr.Zero, IntPtr.Zero);
-            //         SDL_RenderPresent(this.RendererPtr);
+            //         // TODO: Render sprite
             //     }
             // }
+
+            unsafe
+            {
+                var sprite = this.Client.Engine.Characters.ElementAt(0).Sprite;
+                var files = sprite.SpriteSubFiles;
+                var image = files.ElementAt(2);
+                var pixels = image.Image.ToArray();
+
+                fixed (void* p = &pixels[0])
+                {
+                    var texturePtr = SDL_CreateTexture(this.RendererPtr, SDL_PIXELFORMAT_ABGR8888,
+                        (int) SDL_TextureAccess.SDL_TEXTUREACCESS_STATIC, image.Width, image.Height);
+
+                    SDL_SetRenderTarget(this.RendererPtr, texturePtr);
+                    SDL_UpdateTexture(texturePtr, IntPtr.Zero, new IntPtr(p), image.Width * 4);
+                    SDL_RenderCopy(this.RendererPtr, texturePtr, IntPtr.Zero, IntPtr.Zero);
+                }
+            }
         }
     }
 }
