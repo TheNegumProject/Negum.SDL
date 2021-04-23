@@ -126,6 +126,7 @@ namespace Negum.SDL
         {
             this.Client.StopAsync().Wait();
 
+            SDL_DestroyRenderer(this.RendererPtr);
             SDL_DestroyWindow(this.WindowPtr);
             SDL_Quit();
         }
