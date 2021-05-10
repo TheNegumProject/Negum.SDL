@@ -1,23 +1,20 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        <OutputType>Exe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
-        <Title>Negum.SDL</Title>
+        <Title>Negum.SDL.Client</Title>
         <Authors>The Negum Project</Authors>
         <Copyright>MIT License</Copyright>
         <PackageProjectUrl>https://github.com/TheNegumProject/Negum.SDL</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/TheNegumProject/Negum.SDL</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/TheNegumProject/Negum.SDL</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
-        <Company>The Negum Project</Company>
         <NeutralLanguage>en</NeutralLanguage>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Negum.Core" Version="0.2021.509.1606" />
-      <PackageReference Include="Negum.Game" Version="0.2021.510.551" />
-      <PackageReference Include="ppy.SDL2-CS" Version="1.0.225-alpha" />
+      <ProjectReference Include="..\Negum.SDL\Negum.SDL.csproj" />
     </ItemGroup>
 
 </Project>

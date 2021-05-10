@@ -1,9 +1,7 @@
 using System;
 using System.Linq;
-using Negum.Core.Containers;
 using Negum.Game.Client;
 using Negum.Game.Client.Screen;
-using Negum.Game.Common.Containers;
 using static SDL2.SDL;
 
 namespace Negum.SDL
@@ -43,9 +41,6 @@ namespace Negum.SDL
             {
                 throw new SystemException($"Error when initializing SDL: \"{SDL_GetError()}\"");
             }
-
-            NegumContainer.RegisterKnownTypes();
-            NegumGameContainer.RegisterKnownTypes();
 
             this.Client = NegumClientFactory.CreateAsync(negumDirPath).Result;
         }
@@ -101,7 +96,9 @@ namespace Negum.SDL
                         case SDL_EventType.SDL_QUIT:
                             quit = true;
                             break;
-                        case SDL_EventType.SDL_KEYDOWN:
+                        
+                        case SDL_EventType.SDL_KEYDOWN: 
+                            // TODO: This will needs to be more precise. Some combo require other buttons to be pressed and others hold
                             this.Client.Hooks.OnKeyPressed(new[] {(int) e.key.keysym.sym});
                             break;
                     }
@@ -157,8 +154,8 @@ namespace Negum.SDL
 
                             var rect = new SDL_Rect
                             {
-                                w = spriteCtx.Width * ctx.Scale,
-                                h = spriteCtx.Height * ctx.Scale,
+                                w = spriteCtx.Width,
+                                h = spriteCtx.Height,
                                 x = spriteCtx.PosX,
                                 y = spriteCtx.PosY
                             };
