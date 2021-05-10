@@ -8,7 +8,10 @@ The main focus of this project is to give players a fully playable game which is
 <br/>
 
 ## 2. How To Use
-Download and play. <br/>
+Easiest way to install Negum.SDL library is via NuGet like so:
+> dotnet add package Negum.SDL
+> 
+Or check it directly [Here](https://www.nuget.org/packages/Negum.SDL/)
 
 <br/>
 
